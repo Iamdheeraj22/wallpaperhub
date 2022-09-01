@@ -1,4 +1,4 @@
-class Photos {
+class PhotosDataModel {
   int? id;
   int? width;
   int? height;
@@ -11,7 +11,7 @@ class Photos {
   bool? liked;
   String? alt;
 
-  Photos(
+  PhotosDataModel(
       {this.id,
       this.width,
       this.height,
@@ -24,7 +24,7 @@ class Photos {
       this.liked,
       this.alt});
 
-  Photos.fromJson(Map<String, dynamic> json) {
+  PhotosDataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     width = json['width'];
     height = json['height'];

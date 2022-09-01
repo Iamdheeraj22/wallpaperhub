@@ -37,10 +37,43 @@ Future<PhotosModel> getAllPhotos(
   }
 }
 
+Future<PhotosModel> getAllSearchPhotos(
+  BuildContext context, {
+  String search = "",
+  String page = "1",
+  String limit = "1000",
+  bool isShow = true,
+}) async {
+  if (isShow) {
+    showProgressDialogBox(context);
+  }
+  var jsonResponse = null;
+
+  var response = await http.get(
+      Uri.parse(BaseUrl + "search?query=$search&page=$page&per_page=$limit"),
+      headers: {
+        'Authorization': api_key,
+      });
+
+  print(response.body);
+  jsonResponse = json.decode(response.body);
+  var message = jsonResponse["message"];
+  if (isShow) {
+    Navigator.pop(context);
+  }
+  if (response.statusCode == 200) {
+    print("Get All photos api success");
+    return PhotosModel.fromJson(jsonDecode(response.body));
+  } else {
+    customToastMsg(message);
+    throw Exception("Failed to load the work experience!");
+  }
+}
+
 class PhotosModel {
   int? page;
   int? perPage;
-  List<Photos>? photos;
+  List<PhotosDataModel>? photos;
   var totalResults;
   String? nextPage;
 
@@ -51,9 +84,9 @@ class PhotosModel {
     page = json['page'];
     perPage = json['per_page'];
     if (json['photos'] != null) {
-      photos = <Photos>[];
+      photos = <PhotosDataModel>[];
       json['photos'].forEach((v) {
-        photos!.add(new Photos.fromJson(v));
+        photos!.add(new PhotosDataModel.fromJson(v));
       });
     }
     totalResults = json['total_results'];
