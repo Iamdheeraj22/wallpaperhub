@@ -1,5 +1,10 @@
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:wallpaperhub/Model/PhotosDataModel.dart';
 import 'package:wallpaperhub/Widgets.dart';
 
@@ -40,39 +45,70 @@ class _FullImagePageState extends State<FullImagePage> {
         width: getWidth(context),
         child: SingleChildScrollView(
           child: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
-              ClipRRect(
-                child: Image.network(
-                  imgUrl,
-                  fit: BoxFit.cover,
-                  height: getHeight(context),
-                  width: getWidth(context),
-                ),
+              Stack(
+                children: [
+                  Hero(
+                    tag: imgUrl,
+                    child: Image.network(
+                      imgUrl,
+                      fit: BoxFit.cover,
+                      height: getHeight(context),
+                      width: getWidth(context),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        showImageQualities();
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: 50,
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(157, 158, 158, 158),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10))),
+                          margin: EdgeInsets.only(top: getHeight(context) / 2),
+                          child: Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: const Icon(Icons.arrow_back_ios))),
+                    ),
+                  ),
+                ],
               ),
               Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {
-                    showImageQualities();
-                  },
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      width: 50,
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(157, 158, 158, 158),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10))),
-                      margin: EdgeInsets.only(top: getHeight(context) / 2),
-                      child: Container(
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: const Icon(Icons.arrow_back_ios))),
+                  child: InkWell(
+                onTap: () {
+                  _save();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 50),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(115, 158, 158, 158),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/download.png",
+                        height: 25,
+                        width: 25,
+                      ),
+                      customBox(width: 10),
+                      Text("Download Wallpaper")
+                    ],
+                  ),
                 ),
-              )
+              ))
             ],
           ),
         ),
@@ -187,5 +223,17 @@ class _FullImagePageState extends State<FullImagePage> {
         imgUrl = widget.model!.src!.tiny.toString();
       });
     }
+  }
+
+  _save() async {
+    Random random = Random();
+    var tagPhoto = random.nextInt(10000);
+    var response = await Dio()
+        .get(imgUrl, options: Options(responseType: ResponseType.bytes));
+    final result = await ImageGallerySaver.saveImage(
+        Uint8List.fromList(response.data),
+        quality: 100,
+        name: "Wallpaper-" + tagPhoto.toString());
+    print(result);
   }
 }

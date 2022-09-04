@@ -1,5 +1,7 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wallpaperhub/Model/CategoriesModel.dart';
 import 'package:wallpaperhub/Model/Lists.dart';
 import 'package:wallpaperhub/Model/PhotosModel.dart';
@@ -20,10 +22,12 @@ Future<PhotosModel>? _getPhotos;
 //
 
 class _HomePageState extends State<HomePage> {
+  bool storageGranted = false;
   List<CategoriesModel> _categoriesList = [];
   @override
   void initState() {
     super.initState();
+    checkpermission_opencamera();
     _categoriesList = getCategoriesList();
     Future.delayed(Duration.zero, () {
       _getPhotos = getAllPhotos(context, isShow: false);
@@ -171,5 +175,21 @@ class _HomePageState extends State<HomePage> {
                   );
           }),
     );
+  }
+
+  checkpermission_opencamera() async {
+    var storageStatus = await Permission.storage.status;
+    if (!storageStatus.isGranted) await Permission.storage.request();
+    if (await Permission.storage.isGranted) {
+      storageGranted = true;
+    } else {
+      openSettings();
+    }
+  }
+
+  openSettings() async {
+    customToastMsg("Please grant the permission");
+    await AppSettings.openAppSettings()
+        .then((value) => checkpermission_opencamera());
   }
 }

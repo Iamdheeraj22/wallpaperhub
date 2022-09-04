@@ -38,6 +38,11 @@ dependencies:
   http: ^0.13.5
   fluttertoast: ^8.0.9
   loading_indicator: ^3.1.0
+  permission_handler: ^10.0.0
+  app_settings: ^4.1.8
+  photo_view: ^0.14.0
+  image_gallery_saver: ^1.7.1
+  dio: ^4.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
