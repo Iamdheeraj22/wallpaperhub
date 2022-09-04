@@ -235,5 +235,35 @@ class _FullImagePageState extends State<FullImagePage> {
         quality: 100,
         name: "Wallpaper-" + tagPhoto.toString());
     print(result);
+    showBottomSheetforWllper();
+  }
+
+  showBottomSheetforWllper() {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        context: context,
+        builder: (builder) {
+          return StatefulBuilder(builder: (context, state) {
+            return Container(
+              child: Column(
+                children: [
+                  customBox(height: 15),
+                  Text(
+                    "Do you you want to set as a wallpaper?",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(onPressed: () {}, child: Text("Yes")),
+                      ElevatedButton(onPressed: () {}, child: Text("No"))
+                    ],
+                  )
+                ],
+              ),
+            );
+          });
+        });
   }
 }

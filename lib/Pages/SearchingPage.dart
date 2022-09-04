@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaperhub/Model/PhotosModel.dart';
+import 'package:wallpaperhub/Pages/FullImagePage.dart';
 import 'package:wallpaperhub/Widgets.dart';
 
 class SearchingPage extends StatefulWidget {
@@ -75,23 +76,35 @@ class _SearchingPageState extends State<SearchingPage> {
                         return snpshot.hasData &&
                                 snpshot.data!.photos!.isNotEmpty
                             ? GridView.builder(
-                                physics: ClampingScrollPhysics(),
+                                physics: const ClampingScrollPhysics(),
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                 ),
                                 shrinkWrap: true,
                                 itemCount: snpshot.data!.photos!.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 5),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        snpshot.data!.photos![index].src!.medium
-                                            .toString(),
-                                        fit: BoxFit.cover,
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FullImagePage(
+                                                      model: snpshot.data!
+                                                          .photos![index])));
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 5),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          snpshot
+                                              .data!.photos![index].src!.medium
+                                              .toString(),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   );

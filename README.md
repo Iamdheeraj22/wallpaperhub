@@ -1,16 +1,12 @@
-# wallpaperhub
+# Wallpaperhub Project
 
-A new Flutter project.
+## used dependencies
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   -> cached_network_image: ^3.2.1 " This is used for set image over the internet".
+   -> http: ^0.13.5  "A composable, multi-platform, Future-based API for HTTP requests."
+   -> fluttertoast: ^8.0.9 " show the msg fro short time".
+   -> loading_indicator: ^3.1.0 
+   -> permission_handler: ^10.0.0  " it is used for grant the mobile permisison."
+   -> app_settings: ^4.1.8 "It is used for Go to app settings when you don't give permission".
+   -> image_gallery_saver: ^1.7.1  "save the file in mobile Pictures folder"
+   -> dio: ^4.0.6
