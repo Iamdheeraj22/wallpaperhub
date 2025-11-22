@@ -6,9 +6,12 @@ import 'package:wallpaperhub/Widgets.dart';
 class CategoryPhotosPage extends StatefulWidget {
   String categoryTitle = "";
   String imgURl = "";
-  CategoryPhotosPage(
-      {Key? key, required this.categoryTitle, required this.imgURl})
-      : super(key: key);
+
+  CategoryPhotosPage({
+    Key? key,
+    required this.categoryTitle,
+    required this.imgURl,
+  }) : super(key: key);
 
   @override
   State<CategoryPhotosPage> createState() => _CategoryPhotosPageState();
@@ -16,12 +19,16 @@ class CategoryPhotosPage extends StatefulWidget {
 
 class _CategoryPhotosPageState extends State<CategoryPhotosPage> {
   Future<PhotosModel>? _getPhotos;
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      _getPhotos = getAllSearchPhotos(context,
-          search: widget.categoryTitle.toString(), isShow: false);
+      _getPhotos = getAllSearchPhotos(
+        context,
+        search: widget.categoryTitle.toString(),
+        isShow: false,
+      );
       setState(() {});
       _getPhotos!.whenComplete(() => null);
     });
@@ -32,9 +39,7 @@ class _CategoryPhotosPageState extends State<CategoryPhotosPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: BackButton(
-          color: Colors.black,
-        ),
+        leading: BackButton(color: Colors.black),
         centerTitle: true,
         title: Text(
           widget.categoryTitle.toString(),
@@ -42,13 +47,13 @@ class _CategoryPhotosPageState extends State<CategoryPhotosPage> {
         ),
         elevation: 0.0,
       ),
-      body: Container(
+      body: SizedBox(
         height: getHeight(context),
         width: getWidth(context),
         child: SingleChildScrollView(
-            child: Container(
-          margin: EdgeInsets.all(15),
-          child: FutureBuilder<PhotosModel>(
+          child: Container(
+            margin: EdgeInsets.all(15),
+            child: FutureBuilder<PhotosModel>(
               future: _getPhotos,
               builder: (context, snpshot) {
                 return snpshot.hasData && snpshot.data!.photos!.isNotEmpty
@@ -56,23 +61,27 @@ class _CategoryPhotosPageState extends State<CategoryPhotosPage> {
                         physics: const ClampingScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
+                              crossAxisCount: 2,
+                            ),
                         shrinkWrap: true,
                         itemCount: snpshot.data!.photos!.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FullImagePage(
-                                          model:
-                                              snpshot.data!.photos![index])));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FullImagePage(
+                                    model: snpshot.data!.photos![index],
+                                  ),
+                                ),
+                              );
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
+                                vertical: 5,
+                                horizontal: 5,
+                              ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.network(
@@ -83,13 +92,16 @@ class _CategoryPhotosPageState extends State<CategoryPhotosPage> {
                               ),
                             ),
                           );
-                        })
+                        },
+                      )
                     : Container(
                         alignment: Alignment.center,
                         child: const CircularProgressIndicator(),
                       );
-              }),
-        )),
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

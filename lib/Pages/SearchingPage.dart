@@ -17,11 +17,13 @@ class _SearchingPageState extends State<SearchingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
-      _getPhotos =
-          getAllSearchPhotos(context, search: searchImage, isShow: false);
+      _getPhotos = getAllSearchPhotos(
+        context,
+        search: searchImage,
+        isShow: false,
+      );
       setState(() {});
       _getPhotos!.whenComplete(() => null);
     });
@@ -29,8 +31,11 @@ class _SearchingPageState extends State<SearchingPage> {
 
   updateImagesList() {
     Future.delayed(Duration.zero, () {
-      _getPhotos =
-          getAllSearchPhotos(context, search: searchImage, isShow: false);
+      _getPhotos = getAllSearchPhotos(
+        context,
+        search: searchImage,
+        isShow: false,
+      );
       setState(() {});
       _getPhotos!.whenComplete(() => null);
     });
@@ -41,19 +46,20 @@ class _SearchingPageState extends State<SearchingPage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                customBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 218, 227, 241),
-                      borderRadius: BorderRadius.circular(20)),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TextField(
+          margin: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              customBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 218, 227, 241),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
                         onChanged: (v) {
                           setState(() {
                             setState(() {
@@ -63,60 +69,67 @@ class _SearchingPageState extends State<SearchingPage> {
                           });
                         },
                         decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: "Search"),
-                      )),
-                      const Icon(Icons.search)
-                    ],
-                  ),
+                          border: InputBorder.none,
+                          hintText: "Search",
+                        ),
+                      ),
+                    ),
+                    const Icon(Icons.search),
+                  ],
                 ),
-                Expanded(
-                  child: FutureBuilder<PhotosModel>(
-                      future: _getPhotos,
-                      builder: (context, snpshot) {
-                        return snpshot.hasData &&
-                                snpshot.data!.photos!.isNotEmpty
-                            ? GridView.builder(
-                                physics: const ClampingScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
+              ),
+              Expanded(
+                child: FutureBuilder<PhotosModel>(
+                  future: _getPhotos,
+                  builder: (context, snpshot) {
+                    return snpshot.hasData && snpshot.data!.photos!.isNotEmpty
+                        ? GridView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                 ),
-                                shrinkWrap: true,
-                                itemCount: snpshot.data!.photos!.length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FullImagePage(
-                                                      model: snpshot.data!
-                                                          .photos![index])));
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 5),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          snpshot
-                                              .data!.photos![index].src!.medium
-                                              .toString(),
-                                          fit: BoxFit.cover,
-                                        ),
+                            shrinkWrap: true,
+                            itemCount: snpshot.data!.photos!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FullImagePage(
+                                        model: snpshot.data!.photos![index],
                                       ),
                                     ),
                                   );
-                                })
-                            : Container(
-                                alignment: Alignment.center,
-                                child: const CircularProgressIndicator(),
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 5,
+                                    horizontal: 5,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      snpshot.data!.photos![index].src!.medium
+                                          .toString(),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
                               );
-                      }),
-                )
-              ],
-            )),
+                            },
+                          )
+                        : Container(
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicator(),
+                          );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

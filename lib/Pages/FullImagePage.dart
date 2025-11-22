@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:wallpaperhub/Model/PhotosDataModel.dart';
 import 'package:wallpaperhub/Widgets.dart';
 
@@ -227,14 +227,14 @@ class _FullImagePageState extends State<FullImagePage> {
 
   _save() async {
     Random random = Random();
-    var tagPhoto = random.nextInt(10000);
+/*    var tagPhoto = random.nextInt(10000);
     var response = await Dio()
         .get(imgUrl, options: Options(responseType: ResponseType.bytes));
-    final result = await ImageGallerySaver.saveImage(
+    final result = await GallerySaver.saveImage(
         Uint8List.fromList(response.data),
         quality: 100,
         name: "Wallpaper-" + tagPhoto.toString());
-    print(result);
+    print(result);*/
     showBottomSheetforWllper();
   }
 
