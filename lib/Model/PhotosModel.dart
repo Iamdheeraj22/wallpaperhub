@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
-import 'package:wallpaperhub/AuthenticAtion/ApiConstant.dart';
+import 'package:http/http.dart' as http;
 import 'package:wallpaperhub/Model/PhotosDataModel.dart';
 import 'package:wallpaperhub/Widgets.dart';
+import 'package:wallpaperhub/app_config/app_constants.dart';
 
 Future<PhotosModel> getAllPhotos(
   BuildContext context, {
@@ -17,10 +18,10 @@ Future<PhotosModel> getAllPhotos(
   }
   var jsonResponse = null;
 
-  var response = await http
-      .get(Uri.parse(BaseUrl + "curated?page=$page&per_page=$limit"), headers: {
-    'Authorization': api_key,
-  });
+  var response = await http.get(
+    Uri.parse("${AppConstants.baseUrl}curated?page=$page&per_page=$limit"),
+    headers: {'Authorization': AppConstants.apiKey},
+  );
 
   print(response.body);
   jsonResponse = json.decode(response.body);
@@ -50,10 +51,11 @@ Future<PhotosModel> getAllSearchPhotos(
   var jsonResponse = null;
 
   var response = await http.get(
-      Uri.parse(BaseUrl + "search?query=$search&page=$page&per_page=$limit"),
-      headers: {
-        'Authorization': api_key,
-      });
+    Uri.parse(
+      "${AppConstants.baseUrl}search?query=$search&page=$page&per_page=$limit",
+    ),
+    headers: {'Authorization': AppConstants.apiKey},
+  );
 
   print(response.body);
   jsonResponse = json.decode(response.body);
@@ -77,8 +79,13 @@ class PhotosModel {
   var totalResults;
   String? nextPage;
 
-  PhotosModel(
-      {this.page, this.perPage, this.photos, this.totalResults, this.nextPage});
+  PhotosModel({
+    this.page,
+    this.perPage,
+    this.photos,
+    this.totalResults,
+    this.nextPage,
+  });
 
   PhotosModel.fromJson(Map<String, dynamic> json) {
     page = json['page'];
@@ -94,14 +101,14 @@ class PhotosModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['page'] = this.page;
-    data['per_page'] = this.perPage;
-    if (this.photos != null) {
-      data['photos'] = this.photos!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['page'] = page;
+    data['per_page'] = perPage;
+    if (photos != null) {
+      data['photos'] = photos!.map((v) => v.toJson()).toList();
     }
-    data['total_results'] = this.totalResults;
-    data['next_page'] = this.nextPage;
+    data['total_results'] = totalResults;
+    data['next_page'] = nextPage;
     return data;
   }
 }
